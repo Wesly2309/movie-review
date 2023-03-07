@@ -2,8 +2,7 @@
 
 @section('content')
     <div class="card my-5">
-        <img src="https://upload.wikimedia.org/wikipedia/id/thumb/e/e1/Pengabdi_Setan_poster.jpg/220px-Pengabdi_Setan_poster.jpg"
-            width="200" alt="" class="card-image-top">
+        <img src="{{ $movie->image }}" width="200" alt="" class="card-image-top">
         <div class="card-body">
             <h1>{{ $movie->title }}</h1>
             <div class="text-danger">
