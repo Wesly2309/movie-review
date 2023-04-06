@@ -13,7 +13,7 @@
                 </div>
                 <div class="form-group">
                     <label>Image</label>
-                    <input type="text" class="form-control" name="image">
+                    <input type="file" class="form-control" name="image">
                 </div>
                 <div class="form-group">
                     <label>Rating Stars</label>

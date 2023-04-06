@@ -16,4 +16,8 @@ class Movie extends Model
     public function comments() {
         return $this->hasMany(Comment::class);
     }
+
+    public function cast() {
+        return $this->hasMany(Cast::class);
+    }
 }

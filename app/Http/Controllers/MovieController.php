@@ -90,4 +90,21 @@ class MovieController extends Controller
     public function movie_cast_destroy(){
 
     }
+
+
+        
+    public function addCast(Request $request, $movie_id)
+{
+    $movie = Movie::findOrFail($movie_id);
+    $cast_name = $request->input('cast_name');
+    $cast_image = $request->input('cast_image');
+    $cast_role = $request->input('cast_role');
+    $cast = new Cast(['name' => $cast_name, 'image' => $cast_image]);
+    $movie->casts()->save($cast);
+    return redirect()->back()->with('success', 'Cast has been added successfully');
 }
+
+        
+    }
+
+

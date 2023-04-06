@@ -18,19 +18,21 @@
                 </button>
             </h3>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">Tara Basro -
-                    <span class="text-muted ">Rini</span>
-                    <form action="#" method="post">
-                        <button type="submit" class="btn btn-link text-danger text-decoration-none">Delete</button>
-                    </form>
-                </li>
+                @foreach ($casts as $cast)
+                    <li class="list-group-item">{{ $cast->name }} -
+                        <span class="text-muted ">{{ $cast->role }}</span>
+                        <form action="#" method="post">
+                            <button type="submit" class="btn btn-link text-danger text-decoration-none">Delete</button>
+                        </form>
+                    </li>
+                @endforeach
 
             </ul>
 
 
             <h3>Comments</h3>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item"><b>Hansen Jonatan:</b> This Movie so scary
+                <li class="list-group-item"><b>Tes:</b> This Movie so scary
                     <form action="#" method="post">
                         <button type="submit" class="btn btn-link text-danger text-decoration-none">Delete</button>
                     </form>
@@ -86,7 +88,8 @@
                         </div>
                         <div class="col-md-6">
                             <h1>New Cast</h1>
-                            <form action="#" method="post">
+                            <form action="{{ route('movie_add_cast', ['movie_id' => $movie->id]) }}" method="post">
+                                @csrf
                                 <div class="form-group">
                                     <label>Actor Name</label>
                                     <input type="text" class="form-control" name="cast_name">
@@ -94,6 +97,10 @@
                                 <div class="form-group">
                                     <label>Actor Image</label>
                                     <input type="text" class="form-control" name="cast_image">
+                                </div>
+                                <div class="form-group">
+                                    <label>Role</label>
+                                    <input type="text" class="form-control" name="cast_role">
                                 </div>
                                 <button type="submit" class="btn btn-primary float-end mt-2">Submit</button>
                             </form>
