@@ -74,35 +74,28 @@ class MovieController extends Controller
      */
     public function destroy(Movie $movie)
     {
-        //
+        $movie->detach();
+        return back();
     }
 
 
     public function movie_cast_store(Request $request , Movie $movie) {
-        $request->validate([
-            'cast_movie_name'  => 'required',
-            'cast_movie_role' => 'required'
-        ]);
-        $movie->casts()->attach($request->cast_movie_name, ['role' => $request->cast_movie_role]);
-        return back();
+        $cast_name = $request->input('cast_name');
+        $cast_image = $request->input('cast_image');
+        $cast_role = $request->input('cast_role');
+        $cast = new Cast(['name' => $cast_name, 'image' => $cast_image, 'role' => $cast_role]);
+        $movie->casts()->save($cast);
+        return redirect()->back()->with('success', 'Cast has been added successfully');
 
     }
-    public function movie_cast_destroy(){
-
+    public function movie_cast_destroy(Movie $movie , Cast $cast){
+        $movie->cast()->detach($cast->id);
+        return back();
     }
 
 
         
-    public function addCast(Request $request, $movie_id)
-{
-    $movie = Movie::findOrFail($movie_id);
-    $cast_name = $request->input('cast_name');
-    $cast_image = $request->input('cast_image');
-    $cast_role = $request->input('cast_role');
-    $cast = new Cast(['name' => $cast_name, 'image' => $cast_image]);
-    $movie->casts()->save($cast);
-    return redirect()->back()->with('success', 'Cast has been added successfully');
-}
+
 
         
     }

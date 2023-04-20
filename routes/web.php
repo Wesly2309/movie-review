@@ -19,10 +19,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::resource('movies', MovieController::class);
 Route::resource('casts', CastController::class);
-Route::resource('movies.comments', CommentController::class);
+Route::resource('movies.comments', CommentController::class)->shallow();
 
 
-Route::post('/movies/{movies:id}/{cast_store', [MovieController::class,'movie_cast_store'])->name('movie_cast_store');
-Route::delete('/movies/{movies:id}/casts/{cast:id}', [MovieController::class, 'movie_cast_destroy'])->name('movie_cast_destroy');
-
-Route::post('/movies/{movie_id}/add_cast', [MovieController::class , 'addCast'])->name('movie_add_cast');
+Route::post('/movies/{movies:id/{cast_store', [MovieController::class,'movie_cast_store'])->name('movie_cast_store');
+Route::delete('/movies/{movies:id/casts/{cast:id', [MovieController::class, 'movie_cast_destroy'])->name('movie_cast_destroy');

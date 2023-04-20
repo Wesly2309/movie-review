@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Movie extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'image','description', 'rating_star'];
+    protected $guarded = ['id'];
     public function casts(){
         return $this->belongsToMany(Cast::class)->withPivot('role');
     }

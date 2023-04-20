@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Movie;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -26,9 +28,15 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Movie $movie)
     {
-        //
+        $request->all(['comment' => 'required']);
+        Comment::create([
+            'user_id' => Auth::user()->id,
+            'movie_id' => $movie->id,
+            'content' => $request->comment
+        ]);
+        return back();
     }
 
     /**

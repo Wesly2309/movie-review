@@ -28,7 +28,16 @@ class CastController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'image' => 'required'
+        ]);
+
+        Cast::create([
+            'name' => $request->cast_name,
+            'image' => $request->cast_image
+        ]);
+        return back();
     }
 
     /**

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Cast extends Model
 {
     use HasFactory;
-    protected $fillable = ["name", 'image', 'role'];
+    protected $guarded = ['id'];
     public function movies() {
        return $this->belongsToMany(Movie::class);
     }

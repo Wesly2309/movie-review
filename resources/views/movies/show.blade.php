@@ -38,7 +38,7 @@
                     </form>
                 </li>
             </ul>
-            <form action="#" method="post">
+            <form action="{{ route('movies.comments.store', $movie->id) }}" method="post">
                 <input type="text" class="form-control" placeholder="berikan komentar anda">
                 <button type="submit" class="btn btn-primary mt-2 float-end">Comment</button>
             </form>
@@ -88,7 +88,7 @@
                         </div>
                         <div class="col-md-6">
                             <h1>New Cast</h1>
-                            <form action="{{ route('movie_add_cast', ['movie_id' => $movie->id]) }}" method="post">
+                            <form action="{{ route('movie_cast_store') }}" method="post">
                                 @csrf
                                 <div class="form-group">
                                     <label>Actor Name</label>
