@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('cast_movie', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('movie_id')->constrained()->onDelete('cascade');
+            $table->foreignId('movie_id')->constrained()->onDelete('cascade')->nullable();
             $table->foreignId('cast_id')->constrained()->onDelete('cascade');
             $table->string('role')->nullable()->default('actor');
             $table->timestamps();

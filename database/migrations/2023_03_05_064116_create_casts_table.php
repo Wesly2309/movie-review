@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('image');
-            $table->string('role');
+            $table->string('role')->default('actor');
             $table->timestamps();
         });
     }

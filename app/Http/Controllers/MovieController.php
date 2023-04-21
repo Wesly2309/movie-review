@@ -90,6 +90,8 @@ class MovieController extends Controller
         return back();
     }
     public function movie_cast_destroy(Movie $movie , Cast $cast){
+        
+        
         $movie->casts()->detach($cast->id);
         return back();
     }
