@@ -9,9 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('auth')->only(['store', 'destroy']);
+    }
+
+
     public function index()
     {
         //
@@ -35,6 +38,7 @@ class CommentController extends Controller
             'user_id' => Auth::user()->id,
             'movie_id' => $movie->id,
             'content' => $request->comment
+            
         ]);
         return back();
     }
@@ -68,6 +72,11 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        //
+        if ($comment->user->user_id !== Auth::user()->id) {
+            abort(403);
+        }    
+        $comment->delete();
+        return back();
+       
     }
 }

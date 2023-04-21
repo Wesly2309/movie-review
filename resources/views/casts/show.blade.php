@@ -2,19 +2,29 @@
 
 @section('content')
     <div class="card">
-        <img src="https://cdn.medcom.id/dynamic/content/2019/08/30/1058628/0O2rAjE8gV.jpg?w=1024" alt=""
-            class="card-image-top">
+        <img class="card-image-top" src="{{ $cast->image }}">
         <div class="card-body">
-            <h1>Tara Basro</h1>
-            <p>All Movies of Tara Basro</p>
+            <h1>{{ $cast->name}}</h1>
+            <p>All Movies of {{ $cast->name }}</p>
             <ul class="list-group list-group-flush">
-                <a href="#">Pengabdi Setan</a>
+                @if (count($cast->movies))
+                    @foreach ($cast->movies as $movie)
+                    <li class="list-group-item">
+                        <a href="{{ route('movies.show', $movie->id )}}">{{ $movie->title}}</a>
+                    </li>
+                    @endforeach
+                @endif
+
             </ul>
         </div>
         <div class="card-footer">
-            <form action="#" method="post">
+            <form action="{{ route('casts.destroy', $cast->id) }}" method="post">
+                @csrf
+                @method('delete')
                 <button type="submit" class="btn btn-link float-end">Delete</button>
+            
             </form>
         </div>
     </div>
+
 @endsection

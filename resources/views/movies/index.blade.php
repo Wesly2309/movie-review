@@ -2,14 +2,16 @@
 
 @section('content')
     <h1>All Movies
+        @auth
         <a href="{{ route('movies.create') }}" class="btn btn-primary btn-sm"> <i class="fas fa-plus"></i></a>
+        @endauth
     </h1>
     @unless(count($movies))
-        <p>No movies</p>
+        <p>No Movies</p>
     @endunless
 
     <div class="row">
-        @if ($movies)
+        @if (count($movies))
             @foreach ($movies as $movie)
                 <div class="col-md-4">
                     <div class="card">
@@ -21,7 +23,7 @@
                                     <i class="fas fa-star"></i>
                                 @endfor
                             </div>
-                            <p>{{ $movie->description }}</p>
+                            <p>{{ Str::limit($movie->description) }}</p>
                         </div>
                     </div>
                 </div>

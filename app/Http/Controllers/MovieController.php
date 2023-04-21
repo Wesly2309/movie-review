@@ -9,9 +9,11 @@ use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('auth')->only(['create', 'store', 'destroy']);
+    }
+
     public function index()
     {
         $movies = Movie::all();
@@ -36,12 +38,12 @@ class MovieController extends Controller
                 'title' => 'required',
                 'image' =>'required',
                 'rating_star' =>'required',
-                'description' =>'required',
+                'description' =>'required'
             ]);
 
            $movie = Movie::create($request->all());
-
-            return redirect()->route('movies.show',$movie->id);
+           
+           return redirect()->route('movies.show',$movie->id);
     }
 
     /**
@@ -74,22 +76,21 @@ class MovieController extends Controller
      */
     public function destroy(Movie $movie)
     {
-        $movie->detach();
-        return back();
+        $movie->delete();
+        return redirect()->route('movies.index');
     }
 
 
     public function movie_cast_store(Request $request , Movie $movie) {
-        $cast_name = $request->input('cast_name');
-        $cast_image = $request->input('cast_image');
-        $cast_role = $request->input('cast_role');
-        $cast = new Cast(['name' => $cast_name, 'image' => $cast_image, 'role' => $cast_role]);
-        $movie->casts()->save($cast);
-        return redirect()->back()->with('success', 'Cast has been added successfully');
-
+        $request->validate([
+            'cast_movie_name' => 'required',
+            'cast_movie_role' => 'required'
+        ]);
+        $movie->casts()->attach($request->cast_movie_name, ['role' => $request->cast_movie_role]);
+        return back();
     }
     public function movie_cast_destroy(Movie $movie , Cast $cast){
-        $movie->cast()->detach($cast->id);
+        $movie->casts()->detach($cast->id);
         return back();
     }
 
@@ -98,6 +99,6 @@ class MovieController extends Controller
 
 
         
-    }
+}
 
 

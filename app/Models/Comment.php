@@ -11,10 +11,10 @@ class Comment extends Model
 
     protected $fillable = ['user_id', 'movie_id', 'content'];
     public function user() {
-        return $this->belongsToMany(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function movie() {
-        return $this->belongsToMany(Movie::class);
+        return $this->belongsTo(Movie::class);
     }
 }
