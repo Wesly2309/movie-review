@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('cast_movie', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('movie_id')->constrained()->onDelete('cascade')->nullable();
+            $table->foreignId('movie_id')->constrained()->onDelete('cascade');
             $table->foreignId('cast_id')->constrained()->onDelete('cascade');
-            $table->string('role')->nullable()->default('actor');
+            $table->string('role')->nullable();
             $table->timestamps();
         });
     }
@@ -23,7 +23,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+public function down(): void
     {
         Schema::dropIfExists('cast_movie');
     }

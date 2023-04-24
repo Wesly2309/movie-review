@@ -33,17 +33,39 @@ class MovieController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(
-            [
-                'title' => 'required',
-                'image' =>'required',
-                'rating_star' =>'required',
-                'description' =>'required'
-            ]);
+        // $request->validate(
+        //     [
+        //         'title' => 'required',
+        //         'image' =>'required',
+        //         'rating_star' =>'required',
+        //         'description' =>'required'
+        //     ]);
 
-           $movie = Movie::create($request->all());
-           
-           return redirect()->route('movies.show',$movie->id);
+
+        //     $movie = movie::create([
+        //         'title' => 
+        //     ])
+            
+        //    return redirect()->route('movies.show',$movie->id);
+
+        $data = new movie;
+
+        $image = $request->image;
+
+        $imagename = time().'.'.$image->getClientOriginalExtension();
+
+            $request->image->move('movieimage', $imagename);
+
+        $data->image= $imagename;
+
+        $data->title = $request->title;
+        $data->rating_star = $request->rating_star;
+        $data->description= $request->description;
+
+        $data->save();
+
+        return redirect()->route('movies.show',$data->id);
+
     }
 
     /**
@@ -81,18 +103,11 @@ class MovieController extends Controller
     }
 
 
-    public function movie_cast_store(Request $request , Movie $movie) {
-        $request->validate([
-            'cast_movie_name' => 'required',
-            'cast_movie_role' => 'required'
-        ]);
-        $movie->casts()->attach($request->cast_movie_name, ['role' => $request->cast_movie_role]);
-        return back();
-    }
+    
     public function movie_cast_destroy(Movie $movie , Cast $cast){
         
         
-        $movie->casts()->detach($cast->id);
+        $movie->casts()->detach($cast);
         return back();
     }
 

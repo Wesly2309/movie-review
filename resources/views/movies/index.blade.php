@@ -3,10 +3,10 @@
 @section('content')
     <h1>All Movies
         @auth
-        <a href="{{ route('movies.create') }}" class="btn btn-primary btn-sm"> <i class="fas fa-plus"></i></a>
+            <a href="{{ route('movies.create') }}" class="btn btn-primary btn-sm"> <i class="fas fa-plus"></i></a>
         @endauth
     </h1>
-    @unless(count($movies))
+    @unless (count($movies))
         <p>No Movies</p>
     @endunless
 
@@ -15,7 +15,7 @@
             @foreach ($movies as $movie)
                 <div class="col-md-4">
                     <div class="card">
-                        <img src="{{ $movie->image }}" alt="" class="card-image-top">
+                        <img src="/movieimage/{{ $movie->image }}" alt="" class="card-image-top">
                         <div class="card-body">
                             <h3><a href="{{ route('movies.show', $movie->id) }}">{{ $movie->title }}</a></h3>
                             <div class="text-danger">

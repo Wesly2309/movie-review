@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="card my-5">
-        <img src="{{ $movie->image }}" width="200" alt="" class="card-image-top">
+        <img src="/movieimage/{{ $movie->image }}" width="200" alt="" class="card-image-top">
         <div class="card-body">
             <h1>{{ $movie->title }}</h1>
             <div class="text-danger">
@@ -95,7 +95,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <h1>Cast Role</h1>
-                                <form action="{{ route('movie_cast_store', $movie->id) }}" method="post">
+                                <form action="{{ route('cast.update'), $cast->id }}" method="post">
                                     @csrf
                                     <div class="form-group">
                                         <label>Actor Name</label>
@@ -108,16 +108,20 @@
                                             @endif
                                         </select>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Role</label>
-                                        <input type="text" class="form-control" name="cast_movie_role">
+                                    {{-- <div class="form-group">
+                                        <label>Old Actor Role</label>
+                                        <input type="text" value="{{ $cast->role }}" class="form-control" disabled>
                                     </div>
-                                    <button type="submit" class="btn btn-primary mt-2 float-end">Submit</button>
+                                    <div class="form-group">
+                                        <label>New Actor Role</label>
+                                        <input type="text" name="cast_role" class="form-control">
+                                    </div> --}}
+                                    <button type="submit" class="btn btn-primary mt-2 float-end">Update</button>
                                 </form>
                             </div>
                             <div class="col-md-6">
                                 <h1>New Cast</h1>
-                                <form action="{{ route('casts.store') }}" method="post">
+                                <form action="{{ route('casts.store') }}" method="post" enctype="multipart/form-data">
                                     @csrf
                                     <div class="form-group">
                                         <label>Actor Name</label>
@@ -126,6 +130,10 @@
                                     <div class="form-group">
                                         <label>Actor Image</label>
                                         <input type="text" class="form-control" name="cast_image">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Actor Role</label>
+                                        <input type="text" class="form-control" name="cast_role">
                                     </div>
                                     <button type="submit" class="btn btn-primary float-end mt-2">Submit</button>
                                 </form>

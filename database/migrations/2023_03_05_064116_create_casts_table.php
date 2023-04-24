@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('casts', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('image');
-            $table->string('role')->default('actor');
+            $table->string('image');
+            $table->string('role')->nullable();
             $table->timestamps();
         });
     }
