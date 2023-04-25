@@ -95,7 +95,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <h1>Cast Role</h1>
-                                <form action="{{ route('cast.update'), $cast->id }}" method="post">
+                                <form action="{{ route('casts.store') }}" method="post">
                                     @csrf
                                     <div class="form-group">
                                         <label>Actor Name</label>
