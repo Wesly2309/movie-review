@@ -21,5 +21,5 @@ Route::resource('movies', MovieController::class);
 Route::resource('casts', CastController::class);
 Route::resource('movies.comments', CommentController::class)->shallow();
 
-Route::post('/casts/{cast:id}', [CastController::class , 'update']);
 Route::delete('/movies/{movies:id}/casts/{cast:id', [MovieController::class, 'movie_cast_destroy'])->name('movie_cast_destroy');
+Route::post('/movies/id/cast_movie', [MovieController::class , 'movie_cast_store'])->name('movie_cast_store');

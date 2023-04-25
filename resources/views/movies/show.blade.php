@@ -95,7 +95,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <h1>Cast Role</h1>
-                                <form action="{{ route('casts.store') }}" method="post">
+                                <form action="{{ route('movie_cast_store') }}" method="post">
                                     @csrf
                                     <div class="form-group">
                                         <label>Actor Name</label>
@@ -108,6 +108,7 @@
                                             @endif
                                         </select>
                                     </div>
+
                                     {{-- <div class="form-group">
                                         <label>Old Actor Role</label>
                                         <input type="text" value="{{ $cast->role }}" class="form-control" disabled>

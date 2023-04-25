@@ -7,8 +7,8 @@
             <h1>{{ $cast->name }}</h1>
             <p>All Movies of {{ $cast->name }}</p>
             <ul class="list-group list-group-flush">
-                @if (count($cast->movies))
-                    @foreach ($cast->movies as $movie)
+                @if (count($movies))
+                    @foreach ($movies as $movie)
                         <li class="list-group-item">
                             <a href="{{ route('movies.show', $movie->id) }}">{{ $movie->title }}</a>
                         </li>

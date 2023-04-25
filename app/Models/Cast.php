@@ -10,8 +10,9 @@ class Cast extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'image', 'role'];
+    
 
     public function movies() {
-       return $this->belongsToMany(Movie::class);
+       return $this->belongsToMany(Movie::class)->withTimestamps();
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cast;
 use App\Models\Movie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 
 class MovieController extends Controller
@@ -104,15 +105,41 @@ class MovieController extends Controller
 
 
     
-    public function movie_cast_destroy(Movie $movie , Cast $cast){
-        
-        
-        $movie->casts()->detach($cast);
-        return back();
+    public function movie_cast_destroy($id){
+
+        $cast = cast::find($id);
+        $cast->delete();
+        return redirect()->back();
     }
 
+    public function movie_cast_store(Request $request, $movie_id)
+{
+    // Validasi input
+    $validator = Validator::make($request->all(), [
+        'cast_movie_name' => 'required',
+        'cast_movie_role' => 'required',
+    ]);
 
-        
+    if ($validator->fails()) {
+        return redirect()->back()
+            ->withErrors($validator)
+            ->withInput();
+    }
+
+    // Membuat instance dari model Cast
+    $cast = new Cast();
+    $cast->name = $request->input('cast_movie_name');
+    $cast->role = $request->input('cast_movie_role');
+    $cast->movie_id = $movie_id;
+
+    // Menyimpan data cast ke dalam database
+    $cast->save();
+
+    // Redirect kembali ke halaman detail movie
+    return redirect()->route('movies.show', $movie_id)
+        ->with('success', 'Cast berhasil ditambahkan.');
+}
+
 
 
         

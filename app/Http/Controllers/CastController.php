@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cast;
+use App\Models\Movie;
 use Illuminate\Http\Request;
 
 class CastController extends Controller
@@ -46,7 +47,9 @@ class CastController extends Controller
      */
     public function show(Cast $cast)
     {
-        return view('casts.show', compact('cast'));
+
+        $movies = movie::all();
+        return view('casts.show', compact('cast','movies'));
     }
 
     /**
