@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Cast;
 use App\Models\Movie;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -34,28 +36,13 @@ class MovieController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate(
-        //     [
-        //         'title' => 'required',
-        //         'image' =>'required',
-        //         'rating_star' =>'required',
-        //         'description' =>'required'
-        //     ]);
-
-
-        //     $movie = movie::create([
-        //         'title' => 
-        //     ])
-            
-        //    return redirect()->route('movies.show',$movie->id);
-
-        $data = new movie;
+       $data = new movie;
 
         $image = $request->image;
 
         $imagename = time().'.'.$image->getClientOriginalExtension();
 
-            $request->image->move('movieimage', $imagename);
+        $request->image->move('movieimage', $imagename);
 
         $data->image= $imagename;
 
@@ -66,16 +53,16 @@ class MovieController extends Controller
         $data->save();
 
         return redirect()->route('movies.show',$data->id);
-
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Movie $movie)
+    public function show(Movie $movie , Cast $cast)
     {
-        $casts = Cast::all();
-        return view('movies.show', compact('movie', 'casts'));
+        $casts = cast::whereNotNull('name')->get();
+        
+        return view('movies.show', compact('movie','casts'));
     }
 
     /**
@@ -103,46 +90,15 @@ class MovieController extends Controller
         return redirect()->route('movies.index');
     }
 
-
-    
-    public function movie_cast_destroy($id){
-
-        $cast = cast::find($id);
-        $cast->delete();
-        return redirect()->back();
-    }
-
-    public function movie_cast_store(Request $request, $movie_id)
+public function movie_cast_destroy(Movie $movie , $id)
 {
-    // Validasi input
-    $validator = Validator::make($request->all(), [
-        'cast_movie_name' => 'required',
-        'cast_movie_role' => 'required',
-    ]);
 
-    if ($validator->fails()) {
-        return redirect()->back()
-            ->withErrors($validator)
-            ->withInput();
-    }
-
-    // Membuat instance dari model Cast
-    $cast = new Cast();
-    $cast->name = $request->input('cast_movie_name');
-    $cast->role = $request->input('cast_movie_role');
-    $cast->movie_id = $movie_id;
-
-    // Menyimpan data cast ke dalam database
-    $cast->save();
-
-    // Redirect kembali ke halaman detail movie
-    return redirect()->route('movies.show', $movie_id)
-        ->with('success', 'Cast berhasil ditambahkan.');
+    $cast = Cast::find($id);
+    $cast->delete();
+    return redirect()->back();
+    
 }
-
 
 
         
 }
-
-

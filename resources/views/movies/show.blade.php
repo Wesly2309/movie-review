@@ -24,7 +24,7 @@
                 @if (count($casts))
                     @foreach ($casts as $cast)
                         <li class="list-group-item">
-                            <a href="{{ route('casts.show', $cast->id) }}">{{ $cast->name }}</a> -
+                            <a href="{{ route('casts.show', [$cast->id, $movie->id]) }}">{{ $cast->name }}</a> -
                             <span class="text-muted font-italic">{{ $cast->role }}</span>
                             @auth
                                 <form action="{{ route('movie_cast_destroy', [$movie->id, $cast->id]) }}" method="post">
@@ -93,36 +93,10 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-6">
-                                <h1>Cast Role</h1>
-                                <form action="{{ route('movie_cast_store') }}" method="post">
-                                    @csrf
-                                    <div class="form-group">
-                                        <label>Actor Name</label>
-                                        <select name="cast_movie_name" class="form-control">
-                                            <option value="" disabled selected>Choose Cast</option>
-                                            @if (count($casts))
-                                                @foreach ($casts as $cast)
-                                                    <option value="{{ $cast->id }}">{{ $cast->name }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                    </div>
 
-                                    {{-- <div class="form-group">
-                                        <label>Old Actor Role</label>
-                                        <input type="text" value="{{ $cast->role }}" class="form-control" disabled>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>New Actor Role</label>
-                                        <input type="text" name="cast_role" class="form-control">
-                                    </div> --}}
-                                    <button type="submit" class="btn btn-primary mt-2 float-end">Update</button>
-                                </form>
-                            </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <h1>New Cast</h1>
-                                <form action="{{ route('casts.store') }}" method="post" enctype="multipart/form-data">
+                                <form action="{{ route('casts.store') }}" method="post">
                                     @csrf
                                     <div class="form-group">
                                         <label>Actor Name</label>
@@ -134,7 +108,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Actor Role</label>
-                                        <input type="text" class="form-control" name="cast_role">
+                                        <input type="text" class="form-control" name="cast_movie_role">
                                     </div>
                                     <button type="submit" class="btn btn-primary float-end mt-2">Submit</button>
                                 </form>

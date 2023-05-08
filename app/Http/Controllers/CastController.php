@@ -30,26 +30,27 @@ class CastController extends Controller
      */
     public function store(Request $request)
     {
-        $cast = new cast;
+        $request->validate([
+            'cast_name' => 'required',
+            'cast_image' => 'required'
+        ]);
 
-        $cast->name = $request->cast_name;
-        $cast->image = $request->cast_image;
-        $cast->role = $request->cast_role;
-
-        $cast->save();
-
-        return redirect()->back();
+        Cast::create([
+            'name' => $request->cast_name,
+            'image' => $request->cast_image,
+            'role' =>$request->cast_movie_role
+        ]);
+        return back();
 
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Cast $cast)
+    public function show( Movie $movie , Cast $cast )
     {
-
-        $movies = movie::all();
-        return view('casts.show', compact('cast','movies'));
+        $movies = movie::all()->where('id');
+        return view('casts.show', compact('movies' , 'cast'));
     }
 
     /**
@@ -63,16 +64,9 @@ class CastController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $data = cast::find($id);
-
-
-        $data->role = $request->cast_role;
-        
-
-        $data->save();
-        return redirect()->back();
+       
     }
 
     /**
