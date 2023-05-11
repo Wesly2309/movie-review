@@ -23,7 +23,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-transparent ">
             <div class="container">
-                <a class="navbar-brand text-primary fw-bold" href="{{ url('/') }}" >
+                <a class="navbar-brand text-primary fw-bold" href="{{ url('/') }}">
                     Project Movie Review
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -34,8 +34,12 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-
+                    <ul class="navbar-nav ms-5">
+                        <form class="d-flex" role="search" action="{route('/search')}" method="post">
+                            <input class="form-control me-2" type="search" placeholder="Input the title "
+                                aria-label="Search">
+                            <button class="btn btn-primary" type="submit">Search</button>
+                        </form>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
