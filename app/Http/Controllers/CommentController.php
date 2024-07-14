@@ -74,6 +74,5 @@ class CommentController extends Controller
     {
         $comment->delete();
         return back();
-       
     }
 }

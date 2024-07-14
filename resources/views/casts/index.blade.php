@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row justify-content-center">
-        <div class="col-md-4">
+    <div class="flex justify-center">
+        <div class="w-full md:w-1/3">
             {{-- Card --}}
-            <div class="card">
-                {{-- <img class="card-image-top" src="{{ $movie->image }}" --}}
-                <div class="card-body">
-
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                {{-- <img class="w-full h-48 object-cover" src="{{ $movie->image }}" --}}
+                <div class="p-4">
+                    {{-- Card content here --}}
                 </div>
             </div>
         </div>

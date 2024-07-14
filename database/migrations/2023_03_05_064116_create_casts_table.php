@@ -4,19 +4,22 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class() extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('casts', function (Blueprint $table) {
+        Schema::create('cast_movie', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('image')->nullable();
-            $table->string('role')->nullable();
+            $table->unsignedBigInteger('movie_id');
+            $table->unsignedBigInteger('cast_id');
+            $table->string('role')->nullable(); // Adjusted to nullable without default value
             $table->timestamps();
+
+            // Foreign key constraints
+            $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
+            $table->foreign('cast_id')->references('id')->on('casts')->onDelete('cascade');
         });
     }
 
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('casts');
+        Schema::dropIfExists('cast_movie');
     }
 };

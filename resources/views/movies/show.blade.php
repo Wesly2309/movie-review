@@ -1,122 +1,116 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="card my-5">
-        <img src="/movieimage/{{ $movie->image }}" width="200" alt="" class="card-image-top">
-        <div class="card-body">
-            <h1>{{ $movie->title }}</h1>
-            <div class="text-danger">
-                @for ($i = 1; $i <= $movie->rating_star; $i++)
-                    <i class="fas fa-star"></i>
-                @endfor
-            </div>
-            <p>{{ $movie->description }}</p>
+<div class="flex justify-center">
+    <div class="w-full md:w-1/3">
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <img src="{{ asset('storage/' . $movie->image) }}" alt="{{ $movie->title }}" class="full-screen-image">
+            <div class="p-4">
+                <h1 class="text-3xl font-bold text-blue-800">{{ $movie->title }}</h1>
+                <div class="text-yellow-500 my-2">
+                    @for ($i = 1; $i <= $movie->rating_star; $i++)
+                        <i class="fas fa-star"></i>
+                    @endfor
+                </div>
+                <p class="text-gray-700">{{ $movie->description }}</p>
 
+                <div class="mt-6">
+                    <h3 class="text-xl font-semibold text-blue-800 flex items-center">Cast
+                        @auth
+                            <button type="button" class="ml-3 inline-block px-3 py-1 bg-blue-600 text-white text-sm font-semibold rounded-md hover:bg-blue-700" onclick="toggleCastForm()">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                        @endauth
+                    </h3>
+                    <ul class="list-group list-group-flush mt-3">
+                        @forelse ($casts as $cast)
+                            <li class="list-group-item flex justify-between items-center py-2">
+                                <div>
+                                    <a href="{{ route('casts.show', $cast->id) }}" class="text-blue-600 hover:underline">{{ $cast->name }}</a> -
+                                    <span class="text-gray-600 italic">{{ $cast->pivot->role }}</span>
+                                </div>
+                                @auth
+                                    <form action="{{ route('movie_cast_destroy', [$movie->id, $cast->id]) }}" method="post" class="inline-block">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                                    </form>
+                                @endauth
+                            </li>
+                        @empty
+                            <li class="list-group-item">No Casts!</li>
+                        @endforelse
+                    </ul>
 
-            <h3>Cast
-                @auth
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                @endauth
-            </h3>
-            <ul class="list-group list-group-flush">
-                @if (count($casts))
-                    @foreach ($casts as $cast)
-                        <li class="list-group-item">
-                            <a href="{{ route('casts.show', [$cast->id, $movie->id]) }}">{{ $cast->name }}</a> -
-                            <span class="text-muted font-italic">{{ $cast->role }}</span>
-                            @auth
-                                <form action="{{ route('movie_cast_destroy', [$movie->id, $cast->id]) }}" method="post">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="submit" class="btn btn-link text-danger">Delete</button>
-                                </form>
-                            @endauth
-                        </li>
-                    @endforeach
-                @else
-                    No Casts!
-                @endif
-
-            </ul>
-
-
-            <h3>Comments</h3>
-            <ul class="list-group list-group-flush">
-                @if (count($movie->comments))
-                    @foreach ($movie->comments as $comment)
-                        <li class="list-group-item"><b>{{ $comment->user->name }}: </b>{{ $comment->content }}
-                            @auth
-                                <form action="{{ route('comments.destroy', $comment->id) }}" method="post">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="submit" class="btn btn-link text-danger">Delete</button>
-                                </form>
-                            @endauth
-                        </li>
-                    @endforeach
-                @else
-                    No Comments!
-                @endif
-            </ul>
-            <form action="{{ route('movies.comments.store', $movie->id) }}" method="post">
-                @csrf
-                <input type="text" name="comment" class="form-control" placeholder="Berikan Komentar Anda">
-                <button type="submit" class="btn btn-primary mt-2 float-end">Comment</button>
-            </form>
-
-        </div>
-        @auth
-            <div class="card-footer">
-                <form action="{{ route('movies.destroy', $movie->id) }}" method="POST">
-                    @csrf
-                    @method('delete')
-                    <button type="submit" class="btn btn-link float-end">Delete</button>
-                </form>
-            </div>
-        @endauth
-    </div>
-
-    @auth
-
-
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title fs-5" id="exampleModalLabel">New Cast</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-
-                            <div class="col-md-12">
-                                <h1>New Cast</h1>
-                                <form action="{{ route('casts.store') }}" method="post">
-                                    @csrf
-                                    <div class="form-group">
-                                        <label>Actor Name</label>
-                                        <input type="text" class="form-control" name="cast_name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Actor Image</label>
-                                        <input type="text" class="form-control" name="cast_image">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Actor Role</label>
-                                        <input type="text" class="form-control" name="cast_movie_role">
-                                    </div>
-                                    <button type="submit" class="btn btn-primary float-end mt-2">Submit</button>
-                                </form>
+                    <!-- Cast Form -->
+                    <div id="castForm" class="mt-6 hidden">
+                        <h3 class="text-lg font-semibold text-blue-800">New Cast</h3>
+                        <form action="{{ route('casts.store') }}" method="post">
+                            @csrf
+                            <input type="hidden" name="movie_id" value="{{ $movie->id }}"> <!-- Pass the movie ID -->
+                            <div class="form-group mb-3">
+                                <label class="block text-sm font-medium text-gray-700">Actor Name</label>
+                                <input type="text" class="form-control border-gray-300 rounded-md w-full p-2" name="cast_name" required>
                             </div>
-                        </div>
+                            <div class="form-group mb-3">
+                                <label class="block text-sm font-medium text-gray-700">Actor Image</label>
+                                <input type="text" class="form-control border-gray-300 rounded-md w-full p-2" name="cast_image" required>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="block text-sm font-medium text-gray-700">Actor Role</label>
+                                <input type="text" class="form-control border-gray-300 rounded-md w-full p-2" name="cast_movie_role" required>
+                            </div>
+                            <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">Submit</button>
+                        </form>
                     </div>
                 </div>
+
+                <div class="mt-6">
+                    <h3 class="text-xl font-semibold text-blue-800">Comments</h3>
+                    <ul class="list-group list-group-flush mt-3">
+                        @if ($movie->comments->count())
+                            @foreach ($movie->comments as $comment)
+                                <li class="list-group-item flex justify-between items-center py-2">
+                                    <div><b>{{ $comment->user->name }}: </b>{{ $comment->content }}</div>
+                                    @auth
+                                        <form action="{{ route('comments.destroy', $comment->id) }}" method="post" class="inline-block">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                                        </form>
+                                    @endauth
+                                </li>
+                            @endforeach
+                        @else
+                            <li class="list-group-item">No Comments!</li>
+                        @endif
+                    </ul>
+                    <form action="{{ route('movies.comments.store', $movie->id) }}" method="post" class="mt-3">
+                        @csrf
+                        <input type="text" name="comment" class="form-control border-gray-300 rounded-md w-full p-2" placeholder="Berikan Komentar Anda">
+                        <button type="submit" class="mt-2 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">Comment</button>
+                    </form>
+                </div>
             </div>
+
+            @auth
+                <div class="p-6 bg-gray-100 border-t border-gray-200">
+                    <form action="{{ route('movies.destroy', $movie->id) }}" method="POST">
+                        @csrf
+                        @method('delete')
+                        <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                    </form>
+                </div>
+            @endauth
         </div>
-    @endauth
+    </div>
+</div>
+
+<script>
+    function toggleCastForm() {
+        var form = document.getElementById('castForm');
+        form.classList.toggle('hidden');
+    }
+</script>
+
 @endsection

@@ -1,33 +1,42 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>All Movies
-        @auth
-            <a href="{{ route('movies.create') }}" class="btn btn-primary btn-sm"> <i class="fas fa-plus"></i></a>
-        @endauth
-    </h1>
-    @unless (count($movies))
-        <p>No Movies</p>
-    @endunless
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header Section -->
+        <div class="flex items-center justify-between mb-8">
+            <h1 class="text-4xl font-bold text-blue-900">All Movies</h1>
+            @auth
+                <a href="{{ route('movies.create') }}" class="flex items-center text-white bg-blue-700 hover:bg-blue-800 font-semibold rounded-lg text-lg px-6 py-3 shadow-md transition-transform transform hover:scale-105">
+                    <i class="fas fa-plus text-xl mr-3"></i> Add Movie
+                </a>
+            @endauth
+        </div>
 
-    <div class="row">
-        @if (count($movies))
-            @foreach ($movies as $movie)
-                <div class="col-md-4">
-                    <div class="card">
-                        <img src="/movieimage/{{ $movie->image }}" alt="" class="card-image-top">
-                        <div class="card-body">
-                            <h3><a href="{{ route('movies.show', $movie->id) }}">{{ $movie->title }}</a></h3>
-                            <div class="text-danger">
+        <!-- No Movies Message -->
+        @unless (count($movies))
+            <p class="text-lg text-gray-600 text-center">No Movies Available</p>
+        @endunless
+
+        <!-- Movie Cards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            @if (count($movies))
+                @foreach ($movies as $movie)
+                    <div class="bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-2xl">
+                        <img src="{{ asset('storage/' . $movie->image) }}" alt="{{ $movie->title }}" class="w-full-screen-image">
+                        <div class="p-4">
+                            <h3 class="text-xl font-semibold mb-2">
+                                <a href="{{ route('movies.show', $movie->id) }}" class="text-blue-800 hover:text-blue-600">{{ $movie->title }}</a>
+                            </h3>
+                            <div class="text-yellow-500 mb-2">
                                 @for ($i = 1; $i <= $movie->rating_star; $i++)
                                     <i class="fas fa-star"></i>
                                 @endfor
                             </div>
-                            <p>{{ Str::limit($movie->description) }}</p>
+                            <p class="text-gray-700">{{ Str::limit($movie->description, 120) }}</p>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        @endif
+                @endforeach
+            @endif
+        </div>
     </div>
 @endsection

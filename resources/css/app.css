@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+.bg-blue-600 {
+    background-color: #1d4ed8;
+}
+
+.text-blue-600 {
+    color: #1d4ed8;
+}
+
+.bg-blue-500 {
+    background-color: #3b82f6;
+}
+
+.hover\:bg-blue-700:hover {
+    background-color: #2563eb;
+}
+
+.text-blue-400 {
+    color: #60a5fa;
+}
+
+.text-blue-100 {
+    color: #dbeafe;
+}
+
+/* Custom Border Styles */
+.border-custom-gray {
+    border-color: #d1d5db; /* Tailwind's border-gray-300 */
+}
+
+.border-custom-default {
+    border-color: #d1d5db; /* Default border color */
+}
+
+.border-custom-error {
+    border-color: #ef4444; /* Tailwind's border-red-500 */
+}

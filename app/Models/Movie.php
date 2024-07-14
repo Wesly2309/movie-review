@@ -11,8 +11,9 @@ class Movie extends Model
     use HasFactory;
     protected $fillable = ['title', 'image', 'description', 'rating_star'];
 
-    public function casts() {
-        return $this->belongsToMany(Cast::class);
+    public function casts()
+    {
+        return $this->belongsToMany(Cast::class)->withPivot('role');
     }
 
     public function comments() {

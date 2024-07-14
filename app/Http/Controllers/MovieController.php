@@ -1,104 +1,88 @@
 <?php
 
+// app/Http/Controllers/MovieController.php
+
 namespace App\Http\Controllers;
 
-use App\Models\Cast;
 use App\Models\Movie;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-
 
 class MovieController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth')->only(['create', 'store', 'destroy']);
-    }
-
     public function index()
     {
         $movies = Movie::all();
         return view('movies.index', compact('movies'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('movies.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-       $data = new movie;
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'rating_star' => 'required|integer|min=1|max=10',
+            'image' => 'required|image|max:2048',
+        ]);
 
-        $image = $request->image;
+        $imagePath = $request->file('image')->store('images', 'public');
 
-        $imagename = time().'.'.$image->getClientOriginalExtension();
+        $movie = Movie::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'rating_star' => $request->rating_star,
+            'image' => $imagePath,
+            'user_id' => auth()->id(),
+        ]);
 
-        $request->image->move('movieimage', $imagename);
-
-        $data->image= $imagename;
-
-        $data->title = $request->title;
-        $data->rating_star = $request->rating_star;
-        $data->description= $request->description;
-
-        $data->save();
-
-        return redirect()->route('movies.show',$data->id);
+        return redirect()->route('movies.show', $movie->id)->with('success', 'Movie created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Movie $movie , Cast $cast)
+    public function show($id)
     {
-        $casts = cast::whereNotNull('name')->get();
-        
-        return view('movies.show', compact('movie','casts'));
+    // Fetch the movie along with its related casts
+    $movie = Movie::with('casts')->findOrFail($id);
+
+    // Pass the movie with casts to the view
+    return view('movies.show', [
+        'movie' => $movie,
+        'casts' => $movie->casts  // Ensure casts is available for the view
+    ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Movie $movie)
     {
-        //
+        return view('movies.edit', compact('movie'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Movie $movie)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'rating_star' => 'required|integer|min=1|max=10',
+            'image' => 'nullable|image|max=2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+            $movie->update([
+                'image' => $imagePath,
+            ]);
+        }
+
+        $movie->update($request->only(['title', 'description', 'rating_star']));
+
+        return redirect()->route('movies.show', $movie->id)->with('success', 'Movie updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Movie $movie)
     {
         $movie->delete();
-        return redirect()->route('movies.index');
+        return redirect()->route('movies.index')->with('success', 'Movie deleted successfully.');
     }
-
-public function movie_cast_destroy(Movie $movie , $id)
-{
-
-    $cast = Cast::find($id);
-    $cast->delete();
-    return redirect()->back();
-    
-}
-
-
-        
 }

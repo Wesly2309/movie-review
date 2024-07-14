@@ -12,69 +12,60 @@ class CastController extends Controller
     {
         $this->middleware('auth')->only(['store', 'destroy']);
     }
+
     public function index()
     {
-        //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $request->validate([
-            'cast_name' => 'required',
-            'cast_image' => 'required'
+        // Validate the request
+        $validated = $request->validate([
+            'movie_id' => 'required|exists:movies,id',
+            'cast_name' => 'required|string|max:255',
+            'cast_image' => 'required|url',
+            'cast_movie_role' => 'required|string|max:255',
         ]);
 
-        Cast::create([
-            'name' => $request->cast_name,
-            'image' => $request->cast_image,
-            'role' =>$request->cast_movie_role
-        ]);
-        return back();
+        // Find the movie
+        $movie = Movie::find($validated['movie_id']);
 
+        // Create or update the cast and attach to movie
+        $cast = new Cast();
+        $cast->name = $validated['cast_name'];
+        $cast->image = $validated['cast_image'];
+        $cast->role = $validated['cast_movie_role'];
+        $cast->save();
+
+        // Attach cast to movie
+        $movie->casts()->attach($cast->id, ['role' => $cast->role]);
+
+        return redirect()->route('movies.show', $movie->id)->with('success', 'Cast added successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show( Movie $movie , Cast $cast )
+    public function show(Cast $cast)
     {
-        $movies = movie::all()->where('id');
-        return view('casts.show', compact('movies' , 'cast'));
+        $movies = $cast->movies;
+
+        return view('casts.show', compact('cast', 'movies'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Cast $cast)
     {
-        //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request)
+    public function update(Request $request, Cast $cast)
     {
-       
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Cast $cast)
     {
         $cast->delete();
+
         return redirect()->route('movies.index');
     }
 }
